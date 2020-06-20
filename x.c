@@ -19,6 +19,7 @@ char *argv0;
 #include "arg.h"
 #include "st.h"
 #include "win.h"
+#include "xrdb-colors.h"
 
 /* types used in config.h */
 typedef struct {
@@ -1117,6 +1118,8 @@ xinit(int cols, int rows)
 	xloadfonts(usedfont, 0);
 
 	/* colors */
+	XrmInitialize();
+	updatecolors(xw.dpy, xrdb_colors);
 	xw.cmap = XDefaultColormap(xw.dpy, xw.scr);
 	xloadcols();
 
