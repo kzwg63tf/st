@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
+static char *font = "Hack Nerd Font Mono:pixelsize=15:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*
@@ -17,7 +17,7 @@ static int borderpx = 2;
  * 5: value of shell in config.h
  */
 static char *shell = "/bin/sh";
-char *utmp = NULL;
+char *utmp = "tmux";
 /* scroll program: to enable use a string like "scroll" */
 char *scroll = NULL;
 char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
@@ -65,7 +65,7 @@ static unsigned int blinktimeout = 800;
 /*
  * thickness of underline and bar cursors
  */
-static unsigned int cursorthickness = 2;
+static unsigned int cursorthickness = 1;
 
 /*
  * bell volume. It must be a value between -100 and 100. Use 0 for disabling
@@ -74,7 +74,7 @@ static unsigned int cursorthickness = 2;
 static int bellvolume = 0;
 
 /* default TERM value */
-char *termname = "st-256color";
+char *termname = "xterm-256color";
 
 /*
  * spaces per tab
@@ -94,32 +94,32 @@ char *termname = "st-256color";
 unsigned int tabspaces = 8;
 
 /* Terminal colors (16 first used in escape sequence) */
-static const char *colorname[] = {
+static char *colorname[] = {  /* default theme: tango */
 	/* 8 normal colors */
-	"black",
-	"red3",
-	"green3",
-	"yellow3",
-	"blue2",
-	"magenta3",
-	"cyan3",
-	"gray90",
+	"#000000", /* black   */
+	"#CC0000", /* red     */
+	"#4E9A06", /* green   */
+	"#C4A000", /* yellow  */
+	"#3465A4", /* blue    */
+	"#75507B", /* magenta */
+	"#06989A", /* cyan    */
+	"#D3D7CF", /* white   */
 
 	/* 8 bright colors */
-	"gray50",
-	"red",
-	"green",
-	"yellow",
-	"#5c5cff",
-	"magenta",
-	"cyan",
-	"white",
+	"#555753", /* black   */
+	"#EF2929", /* red     */
+	"#8AE234", /* green   */
+	"#FCE94F", /* yellow  */
+	"#729FCF", /* blue    */
+	"#AD7FA8", /* magenta */
+	"#34E2E2", /* cyan    */
+	"#EEEEEC", /* white   */
 
 	[255] = 0,
 
 	/* more colors can be added after 255 to use with DefaultXX */
-	"#cccccc",
-	"#555555",
+	"#CCCCCC", /* cursor */
+	"#CCCCCC", /* reverse cursor */
 };
 
 
@@ -127,10 +127,36 @@ static const char *colorname[] = {
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
  */
-unsigned int defaultfg = 7;
-unsigned int defaultbg = 0;
-static unsigned int defaultcs = 256;
+#define fg__ 7
+#define bg__ 0
+#define cs__ 256
+/* macro needed for structure initialization */
+unsigned int defaultfg = fg__;
+unsigned int defaultbg = bg__;
+static unsigned int defaultcs = cs__;
 static unsigned int defaultrcs = 257;
+
+static XrdbColor xrdb_colors[] = {
+	{ "st.color0",		&colorname[0] },
+	{ "st.color1",		&colorname[1] },
+	{ "st.color2",		&colorname[2] },
+	{ "st.color3",		&colorname[3] },
+	{ "st.color4",		&colorname[4] },
+	{ "st.color5",		&colorname[5] },
+	{ "st.color6",		&colorname[6] },
+	{ "st.color7",		&colorname[7] },
+	{ "st.color8",		&colorname[8] },
+	{ "st.color9",		&colorname[9] },
+	{ "st.color10",		&colorname[10] },
+	{ "st.color11",		&colorname[11] },
+	{ "st.color12",		&colorname[12] },
+	{ "st.color13",		&colorname[13] },
+	{ "st.color14",		&colorname[14] },
+	{ "st.color15",		&colorname[15] },
+	{ "st.foreground",	&colorname[fg__] },
+	{ "st.background",	&colorname[bg__] },
+	{ "st.cursorColor",	&colorname[cs__] },
+};
 
 /*
  * Default shape of cursor
@@ -139,7 +165,13 @@ static unsigned int defaultrcs = 257;
  * 6: Bar ("|")
  * 7: Snowman ("☃")
  */
-static unsigned int cursorshape = 2;
+static unsigned int cursorshape = 6;
+
+/*
+ * If this is 1, the cursor will be rendered as a hollow box when the
+ * window is not focused.
+ */
+static const int unfocused_hollow = 0;
 
 /*
  * Default columns and rows numbers
@@ -191,9 +223,9 @@ static Shortcut shortcuts[] = {
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
 	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
 	{ XK_ANY_MOD,           XK_Print,       printsel,       {.i =  0} },
-	{ TERMMOD,              XK_Prior,       zoom,           {.f = +1} },
-	{ TERMMOD,              XK_Next,        zoom,           {.f = -1} },
-	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
+	{ TERMMOD,              XK_K,           zoom,           {.f = +1} },
+	{ TERMMOD,              XK_J,           zoom,           {.f = -1} },
+	{ TERMMOD,              XK_R,           zoomreset,      {.f =  0} },
 	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
