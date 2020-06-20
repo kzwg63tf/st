@@ -4,7 +4,7 @@ VERSION = 0.8.4
 # Customize below to fit your system
 
 # paths
-PREFIX = /usr/local
+PREFIX = /usr
 MANPREFIX = $(PREFIX)/share/man
 
 X11INC = /usr/X11R6/include
@@ -21,6 +21,7 @@ LIBS = -L$(X11LIB) -lm -lrt -lX11 -lutil -lXft \
        `$(PKG_CONFIG) --libs freetype2`
 
 # flags
+CFLAGS = -std=c99 -pedantic -Wall -O3
 STCPPFLAGS = -DVERSION=\"$(VERSION)\" -D_XOPEN_SOURCE=600
 STCFLAGS = $(INCS) $(STCPPFLAGS) $(CPPFLAGS) $(CFLAGS)
 STLDFLAGS = $(LIBS) $(LDFLAGS)
@@ -32,4 +33,4 @@ STLDFLAGS = $(LIBS) $(LDFLAGS)
 #       `$(PKG_CONFIG) --libs freetype2`
 
 # compiler and linker
-# CC = c99
+CC = tcc
